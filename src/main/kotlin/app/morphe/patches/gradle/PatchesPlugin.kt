@@ -140,6 +140,8 @@ abstract class PatchesPlugin : Plugin<Project> {
                 val classpathFiles = (runtimeClasspath.files + compileClasspath.files)
                     .filter { it.exists() && it != patchesFile }
                     .distinctBy { it.absolutePath }
+                    .filter { !it.name.contains("smali-dexlib2") && !it.name.contains("smali-baksmali") }
+                    .filter { !it.name.contains("morphe-patcher") }
                     .map { it.toPath() }
 
                 if (classpathFiles.isNotEmpty()) {
