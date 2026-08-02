@@ -7,7 +7,7 @@ plugins {
     signing
 }
 
-group = "app.morphe"
+group = "io.github.eduardo3677-ai"
 
 repositories {
     mavenLocal()
@@ -39,8 +39,8 @@ kotlin {
 }
 
 gradlePlugin {
-    website = "https://morphe.software"
-    vcsUrl = "ssh://git@github.com:MorpheApp/morphe-patches-gradle-plugin.git"
+    website = "https://github.com/eduardo3677-ai/morphe-patches-gradle-plugin"
+    vcsUrl = "ssh://git@github.com:eduardo3677-ai/morphe-patches-gradle-plugin.git"
 
     plugins {
         create("patchesSettingsPlugin") {
@@ -56,11 +56,17 @@ gradlePlugin {
 publishing {
     repositories {
         maven {
-            name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/MorpheApp/morphe-patches-gradle-plugin")
+            name = "MavenCentral"
+            url = uri(
+                if (project.version.toString().endsWith("-SNAPSHOT")) {
+                    "https://central.sonatype.com/repository/maven-snapshots/"
+                } else {
+                    "https://central.sonatype.com/api/v1/publisher/deploy/"
+                }
+            )
             credentials {
-                username = System.getenv("GITHUB_ACTOR")
-                password = System.getenv("GITHUB_TOKEN")
+                username = System.getenv("MAVEN_CENTRAL_USERNAME") ?: ""
+                password = System.getenv("MAVEN_CENTRAL_PASSWORD") ?: ""
             }
         }
     }
@@ -68,6 +74,5 @@ publishing {
 
 signing {
     useGpgCmd()
-
     sign(publishing.publications)
 }

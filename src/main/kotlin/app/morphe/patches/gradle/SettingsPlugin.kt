@@ -41,13 +41,10 @@ abstract class SettingsPlugin @Inject constructor(
             google()
             maven { repository -> repository.url = URI("https://jitpack.io") }
             maven { repository ->
-                // A repository must be specified. "registry" is a dummy.
-                repository.url = URI("https://maven.pkg.github.com/MorpheApp/registry")
+                repository.url = URI("https://maven.pkg.github.com/eduardo3677-ai/registry")
                 repository.credentials {
-                    it.username = providers.gradleProperty("gpr.user")
-                        .orElse(System.getenv("GITHUB_ACTOR")).get()
-                    it.password = providers.gradleProperty("gpr.key")
-                        .orElse(System.getenv("GITHUB_TOKEN")).get()
+                    it.username = System.getenv("GITHUB_ACTOR") ?: ""
+                    it.password = System.getenv("GITHUB_TOKEN") ?: ""
                 }
             }
         }
